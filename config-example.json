@@ -1,0 +1,8 @@
+{
+    "port": 8000,
+    "routes": {
+        "my-syte.com": "localhost:80",
+        "www.my-syte.com": "localhost:9000",
+        "localhost:8000": "localhost:3000"
+    }
+}
