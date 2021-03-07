@@ -52,7 +52,14 @@ func main() {
 	if err == nil {
 		proxyMap := getProxyMap(routes)
 		http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
+			scheme := "http"
+			if req.URL.Scheme == "https" {
+				scheme = req.URL.Scheme
+			}
+
+			fmt.Printf("- %s://%s%s %s \n", scheme, req.Host, req.URL.Path, req.Method)
 			currentProxy := proxyMap[req.Host]
+
 			if currentProxy == nil {
 				res.WriteHeader(http.StatusNotFound)
 				fmt.Fprintf(res, "Service %q not found", html.EscapeString(req.Host))
@@ -61,6 +68,7 @@ func main() {
 			}
 		})
 
+		fmt.Printf("Proxy server run on http://localhost:%d/ \n", port)
 		http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	} else {
 		fmt.Println(err)
